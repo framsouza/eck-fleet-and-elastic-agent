@@ -1,0 +1,36 @@
+apiVersion: elasticsearch.k8s.elastic.co/v1
+kind: Elasticsearch
+metadata:
+  name: cluster1
+spec:
+  version: 7.14.0
+  nodeSets:
+  - name: elasticsearch
+    count: 3
+    podTemplate:
+      spec:
+        initContainers:
+        - name: sysctl
+          securityContext:
+            privileged: true
+          command: ['sh', '-c', 'sysctl -w vm.max_map_count=262144']
+        containers:
+          - name: elasticsearch
+            resources:
+              requests:
+                memory: 4Gi
+              limits:
+                memory: 4Gi
+            env:
+            - name: ES_LOG_STYLE
+              value: file
+    volumeClaimTemplates:
+        - metadata:
+            name: elasticsearch-data
+          spec:
+            accessModes:
+            - ReadWriteOnce
+            resources:
+              requests:
+                storage: 6Gi
+            storageClassName: standard

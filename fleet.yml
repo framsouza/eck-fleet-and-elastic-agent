@@ -1,0 +1,20 @@
+apiVersion: agent.k8s.elastic.co/v1alpha1
+kind: Agent
+metadata:
+  name: fleet-server
+spec:
+  version: 7.14.0
+  kibanaRef:
+    name: kibana-cluster1
+  elasticsearchRefs:
+  - name: cluster1
+  mode: fleet
+  fleetServerEnabled: true
+  deployment:
+    replicas: 1
+    podTemplate:
+      spec:
+        serviceAccountName: fleet-server
+        automountServiceAccountToken: true
+        securityContext:
+          runAsUser: 0
