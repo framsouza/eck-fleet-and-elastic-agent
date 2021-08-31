@@ -14,8 +14,21 @@ Next step is deploy Kibana by applying the [kibana.yml](https://github.com/frams
 There are two lines to pay attention here:
 
 ```
- config:
-	 xpack.fleet.agents.elasticsearch.host: "https://cluster1-es-http.default.svc:9200"
-	 xpack.fleet.agents.fleet_server.hosts: ["https://fleet-server-agent-http.default.svc:8220"]
+ xpack.fleet.agents.elasticsearch.host: "https://cluster1-es-http.default.svc:9200"
+ xpack.fleet.agents.fleet_server.hosts: ["https://fleet-server-agent-http.default.svc:8220"]
 ```
 
+Those lines are required to properly configure Fleet.
+
+`xpack.fleet.agents.elasticsearch.host` must point to elasticsearch cluster where the elastic agent will ship the data. 
+`xpack.fleet.agents.fleet_server.hosts` must point to Fleet Server that Elastic Agent should connect to.
+
+No worries, once you deploy Fleet Server a Kubernetes service will be automatically created, then you should use it on the `xpack.fleet.agents.fleet_server.hosts` configuration.
+
+Once you have elasticsearch & kibana up and running, we can now deploy the Fleet server by applying the [fleet.yml](https://github.com/framsouza/eck-fleet-and-elastic-agent/blob/main/fleet.yml)
+
+There are some important things to take into consideration in this file. First things first, make sure to properly configure the `kibanaRef` and `elasticsearchRefs` .
+
+As we are using Fleet, the `mode` configuration must be `fleet`, and to make it works as a Fleet server instead of agent, you must add the line `fleetServerEnabled: true`, if you don't add it, it will work as a elastic agent.
+
+We are deploying only 1 replica (which is enough for this test but you may increase it to handle your workload) and defining the serviceaccount permission to be able to access the Kubernetes resources.
