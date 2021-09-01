@@ -8,8 +8,7 @@ On the other hand, Fleet is a Kibana UI to add and manage elastic agents.
 First thing first, let's deploy our elasticsearch cluster by applying the [es.yml](https://github.com/framsouza/eck-fleet-and-elastic-agent/blob/main/es.yml) file.
 There's nothing to care about on this manifest, this is pretty straightforward, contains only the resource request/limit (very important to set it) and the vm.max_map_count adjustment. 
 
-Next step is deploy Kibana by applying the [kibana.yml](https://github.com/framsouza/eck-fleet-and-elastic-agent/blob/main/kibana.yml)
-There are two lines to pay attention here:
+Next step is deploy Kibana by applying the [kibana.yml](https://github.com/framsouza/eck-fleet-and-elastic-agent/blob/main/kibana.yml). There are two lines to pay attention here:
 
 ```
  xpack.fleet.agents.elasticsearch.host: "https://cluster1-es-http.default.svc:9200"
@@ -33,7 +32,7 @@ We are deploying only 1 replica (which is enough for this test but you may incre
 
 Once we have the fleet server up and running (you can check it by looking into the pod logs _kubectl logs deploy/fleet-server-agent_ or checking the resource status by running _kubectl get agents_) let's deploy the elastic agent that will be managed by Fleet by applying the [elastic-agent.yml](https://github.com/framsouza/eck-fleet-and-elastic-agent/blob/main/elastic-agent.yml) manifest.
 
-You can deploy it as daemonset or deploymnet, in this case, we are going to use daemonset because we want to collect Kubernetes metrics from every single node.
+You can deploy it as daemonset or deployment, in this case, we are going to use daemonset because we want to collect Kubernetes metrics from every single node.
 
 As well as the Fleet server, we must specify the `kibanaRef`. We also need to specify the fleet server ref (instead of elasticsearchRef) using the `fleetServerRef` (you can check the name by running _kubectl get agents_). 
 The way we know this is agent is by using only the `mode : fleet`, it will make it works by an agent. 
