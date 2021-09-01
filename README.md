@@ -1,7 +1,5 @@
 # eck-fleet-and-elastic-agent
 
-_(Work in Progress)_
-
 This page will guide you through how to configure elastic agent with fleet managed mode using ECK.
 Elastic agent is a unified way to collect logs and metrics and ship them to elasticsearch, basically, instead of configuring filebeat and metricbeat, you can now choose by install only Elastic agent in your host.
 On the other hand, Fleet is a Kibana UI to add and manage elastic agents.
@@ -42,4 +40,13 @@ The way we know this is agent is by using only the `mode : fleet`, it will make 
 
 Once you deploy it, you can access Kibana and go to Fleet and you will see something similar to that: 
 
+<img width="1431" alt="Screenshot 2021-09-01 at 12 22 34" src="https://user-images.githubusercontent.com/16880741/131655392-2fd814c1-8453-400b-8e2f-43359de0944c.png">
 
+You can then access the Default policy and add the Kubernetes integration, once this is added and updated in every single agent you can access the Metric inventory and check the Kubernetes pods metrics like that:
+
+<img width="1436" alt="Screenshot 2021-09-01 at 12 24 15" src="https://user-images.githubusercontent.com/16880741/131655647-7c2c6fa1-c5a3-40d7-aa3a-e30ec2bd60b7.png">
+
+
+Quite easy, right? ;)
+
+I hope this helps you 
